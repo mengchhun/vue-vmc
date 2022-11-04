@@ -1,24 +1,29 @@
+<template>
+    <header>
+        <h1> {{title}} </h1>
+        <Button
+        @btn-click="$emit('toggle-add-product')"
+        :text="showAddProduct ? 'Close': 'Add Product'" 
+        :color="showAddProduct? 'red': 'green'"
+        />
+    </header>
+</template>
+
 <script>
-import Buttom from './Button.vue'
+import Button from './Button.vue'
 
 export default{
     name: 'Header',
     props: {
         title: String,
+        showAddProduct: Boolean
     },
     components: {
-        Buttom,
-    }
+        Button,
+    },
+    emits: ['toggle-add-product']
 }
 </script>
-
-<template>
-    <header>
-        <h1> {{title}} </h1>
-        <Buttom text="Add Product" color="green"/>
-    </header>
-</template>
-
 
 <style scoped>
 header{

@@ -1,45 +1,84 @@
+<template>
+  <div class="container">
+
+    <Header 
+    @toggle-add-product="toggleAddProduct"
+    title = 'Product Generator'
+    :showAddProduct="showAddProduct"
+    />
+
+    <div v-show="showAddProduct">
+      <AddProduct @add-product="addProduct" />
+    </div>
+
+    <Products
+    @toggle-soldout="toggleSoldOut"
+    @delete-product="deleteproduct"
+    :products="products" />
+
+  </div>
+</template>
+
 <script>
 import Header from './components/Header.vue'
 import Products from './components/Products.vue'
+import AddProduct from './components/AddProduct.vue'
 
 export default{
   name: 'App',
   components:{
     Header,
     Products,
+    AddProduct
   },
   data(){
     return{
-      tasks: []
+      products: [],
+      showAddProduct: false
+    }
+  },
+  methods:{
+    toggleAddProduct(){
+      this.showAddProduct = !this.showAddProduct
+    },
+    addProduct(product){
+      this.products = [...this.products, product]
+    },
+    deleteproduct(id){
+      if(confirm('Are you sure?'))
+      this.products = this.products.filter((product) => product.id !== id)
+    },
+    toggleSoldOut(id){
+      this.products = this.products.map((product) => product.id === id ? 
+      {...product, soldout : !product.soldout} : product)
     }
   },
   created(){
-    this.items = [
+    this.products = [
     {
+      id: '1',
       title: 'test title 1',
       description: 'test desc 1',
-      price: 12.34
+      price: 12.34,
+      soldout: true
     },
     {
+      id: '2',
       title: 'test title 2',
       description: 'test desc 2',
-      price: 45.67
+      price: 45.67,
+      soldout: true
     },
     {
+      id: '3',
       title: 'test title 3',
       description: 'test desc 3',
-      price: 78.90
+      price: 78.90,
+      soldout: false
     }
   ]}
 }
 </script>
-
-<template>
-  <div class="container">
-    <Header title = 'Product Generator'/>
-    <Products :items="items" />
-  </div>
-</template>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');

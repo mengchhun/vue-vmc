@@ -1,22 +1,24 @@
+<template>
+  <div 
+  @dblclick="$emit('toggle-soldout', product.id)"
+  :class="[product.soldout ? 'soldout' : '', 'product']">
+      <h3>
+          {{ product.title }} 
+          <i @click="$emit('delete-product', product.id)" class="fas fa-times"></i>
+      </h3>
+      <p>{{ product.description }}</p>
+      <p>{{ product.price }}</p>
+  </div>
+</template>
+
 <script>
     export default{
         name: 'Product',
         props:{
-            item: Object,
+          product: Object,
         },
     }
 </script>
-
-<template>
-    <div class="product">
-        <h3>
-            {{ item.title }} 
-            <i class="fas fa-times"></i>
-        </h3>
-        <p>{{ item.description }}</p>
-        <p>{{ item.price }}</p>
-    </div>
-</template>
 
 <style scope>
 .fas {
@@ -28,7 +30,7 @@
   padding: 10px 20px;
   cursor: pointer;
 }
-.product.reminder {
+.product.soldout {
   border-left: 5px solid green;
 }
 .product h3 {

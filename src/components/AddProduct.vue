@@ -8,7 +8,7 @@
 
     <div class="form-control">
       <label>Description</label>
-      <input type="text" v-model="desc" name="desc" placeholder="Add Description" />
+      <input type="text" v-model="description" name="description" placeholder="Add Description" />
     </div>
 
     <div class="form-control">
@@ -30,10 +30,10 @@
         name:'AddProduct',
         data(){
             return {
-                title: '',
-                desc: '',
-                price: '',
-                soldout: false
+              title: '',
+              description: '',
+              price: '',
+              soldout: false
             }
         },
         methods:{
@@ -43,7 +43,7 @@
                 if(!this.title){
                     alert('Please add a title')
                 }
-                if(!this.desc){
+                if(!this.description){
                     alert('Please add a description')
                 }
                 if(!this.price){
@@ -51,15 +51,15 @@
                 }
 
                 const newProduct ={
-                    id: Math.floor(Math.random() * 100000),
+                    //id: Math.floor(Math.random() * 100000),
                     title: this.title,
-                    desc: this.desc,
-                    price: this.price,
+                    description: this.description,
+                    price: this.price,  
                     soldout: this.soldout
                 }
                 
                 this.title = '';
-                this.desc = '';
+                this.description = '';
                 this.price = '';
                 this.soldout = '';
 

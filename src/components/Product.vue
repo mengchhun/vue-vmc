@@ -7,7 +7,7 @@
           <i @click="$emit('delete-product', product.id)" class="fas fa-times"></i>
       </h3>
       <p>{{ product.description }}</p>
-      <p>{{ product.price }}</p>
+      <p>{{ product.price }}$</p>
   </div>
 </template>
 

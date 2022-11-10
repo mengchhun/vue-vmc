@@ -3,7 +3,7 @@
         <h1> {{title}} </h1>
         <Button
         @btn-click="$emit('toggle-add-product')"
-        :text="showAddProduct ? 'Close': 'Add Product'" 
+        :text="showAddProduct ? 'Close': 'Add'" 
         :color="showAddProduct? 'red': 'green'"
         />
     </header>

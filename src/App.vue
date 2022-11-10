@@ -3,9 +3,8 @@
 
     <Header 
     @toggle-add-product="toggleAddProduct"
-    title = 'Product Generator'
-    :showAddProduct="showAddProduct"
-    />
+    title = 'Product Tracker'
+    :showAddProduct="showAddProduct" />
 
     <div v-show="showAddProduct">
       <AddProduct @add-product="addProduct" />
@@ -41,42 +40,66 @@ export default{
     toggleAddProduct(){
       this.showAddProduct = !this.showAddProduct
     },
-    addProduct(product){
-      this.products = [...this.products, product]
+    async addProduct(product){
+      const res = await fetch('http://165.22.48.65:3000/products', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(product)
+      })
+      
+      const data = await res.json()
+      const validData = {
+        id: data['newProduct']._id,
+        title: data['newProduct'].title,
+        description: data['newProduct'].description,
+        price: data['newProduct'].price,
+        soldout: data['newProduct'].soldout
+      }
+      this.products = [...this.products, validData]
     },
-    deleteproduct(id){
-      if(confirm('Are you sure?'))
-      this.products = this.products.filter((product) => product.id !== id)
+    async deleteproduct(id){
+      if(confirm('Are you sure?')){
+        const res = await fetch(`http://165.22.48.65:3000/products/${id}`, {
+          method: 'DELETE'
+        })
+        
+        res.status === 200
+        ? (this.products = this.products.filter((product) => product.id !== id))
+        : alert('Error deleting product')
+      }
     },
-    toggleSoldOut(id){
+    async toggleSoldOut(id){
+      const soldOutProduct = await this.fetchProduct(id);
+      const updProduct = {...soldOutProduct, soldout: !soldOutProduct.soldout}
+
+      const res = await fetch(`http://165.22.48.65:3000/products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(updProduct)
+      })
+
+      const data = await res.json()
       this.products = this.products.map((product) => product.id === id ? 
-      {...product, soldout : !product.soldout} : product)
+      {...product, soldout : data.soldout} : product)
+    },
+    async fetchProducts(){
+      const res = await fetch('http://165.22.48.65:3000/products')
+      const data = await res.json()
+      return data
+    },
+    async fetchProduct(id){
+      const res = await fetch(`http://165.22.48.65:3000/products/${id}`)
+      const data = await res.json()
+      return data
     }
   },
-  created(){
-    this.products = [
-    {
-      id: '1',
-      title: 'test title 1',
-      description: 'test desc 1',
-      price: 12.34,
-      soldout: true
-    },
-    {
-      id: '2',
-      title: 'test title 2',
-      description: 'test desc 2',
-      price: 45.67,
-      soldout: true
-    },
-    {
-      id: '3',
-      title: 'test title 3',
-      description: 'test desc 3',
-      price: 78.90,
-      soldout: false
-    }
-  ]}
+  async created(){
+    this.products = await this.fetchProducts()
+  }
 }
 </script>
 
